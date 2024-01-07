@@ -1,0 +1,56 @@
+{$CLEO .csa}
+{$NOSOURCE}
+goto @pl        // LookBehind by KillerSA
+{$include includes\CleoIniFiles.h}
+:pl
+
+if OpenIniFile()
+then
+    DATATYPE = _integer
+    GetValueFromIni() // Return as "ReturnValue"
+
+    CloseIni()
+end
+
+int LookBehind = 0x3BFDE2, iMemBackup = 0xE802F5D9 // BL call
+
+while true 
+    wait 0 ms 
+    
+    int bNoWrite, b
+    
+    if is_player_playing $PLAYER_CHAR
+    then
+        if is_char_in_any_car $PLAYER_ACTOR
+        then
+            if bNoWrite == false
+            then
+                write_mem_addr LookBehind value 0x8000F3AF size 4 add_ib 1 protect 1
+            end
+            
+            :l
+            while is_widget_pressed ReturnValue
+                03C8: set_camera_directly_before_player
+                wait 0 ms
+                b = TRUE
+            end
+            if b == TRUE
+            then
+                0373: set_camera_directly_behind_player
+                b = FALSE
+            end
+            bNoWrite = true
+        else
+            
+            if bNoWrite == true
+            then
+                write_mem_addr LookBehind value iMemBackup size 4 add_ib 1 protect 1
+            end
+            bNoWrite = false
+        end
+        
+
+
+    end
+
+end
