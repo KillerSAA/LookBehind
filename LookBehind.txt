@@ -25,7 +25,7 @@ while true
         then
             if bNoWrite == false
             then
-                write_mem_addr LookBehind value 0x8000F3AF size 4 add_ib 1 protect 1
+                write_mem_addr LookBehind value 0x8000F3AF size 4 add_ib 1 protect 1 // Make nop
             end
             
             :l
